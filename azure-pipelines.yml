@@ -1,0 +1,22 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- script: |
+    echo "Instalando dependencias"
+    pip install -r requirements.txt
+  displayName: 'Instalar dependencias'
+
+- script: |
+    echo "Ejecutando pruebas"
+    pytest
+  displayName: 'Ejecutar pruebas'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'your-azure-subscription'
+    appName: 'informe-app'
+    package: '$(Build.ArtifactStagingDirectory)'
