@@ -12,3 +12,12 @@ app.config.update({
     'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
 })
 oidc = OpenIDConnect(app)
+
+# Ruta de prueba
+@app.route('/')
+def hello():
+    return "¡El microservicio de informes está en ejecución!"
+
+# Punto de entrada para ejecutar la aplicación
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5001)
