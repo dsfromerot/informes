@@ -3,3 +3,4 @@ authlib==1.2.1
 requests==2.31.0
 flask-oidc==1.4.0
 pytest==7.4.0
+itsdangerous==2.0.1
