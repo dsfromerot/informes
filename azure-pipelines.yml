@@ -1,22 +1,25 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: 'ubuntu-latest'
+  name: servicios  # Usar el agente self-hosted en la VM
 
-steps:
-- script: |
-    echo "Instalando dependencias"
-    pip install -r requirements.txt
-  displayName: 'Instalar dependencias'
+stages:
+  - stage: Deploy
+    jobs:
+      - job: DeployToVM
+        steps:
+          - checkout: none
+          - script: |
+              echo "Trayendo los cambios..."
+              cd /home/azureuser/informes/
+              git pull
 
-- script: |
-    echo "Ejecutando pruebas"
-    pytest
-  displayName: 'Ejecutar pruebas'
-
-- task: AzureWebApp@1
-  inputs:
-    azureSubscription: 'your-azure-subscription'
-    appName: 'informe-app'
-    package: '$(Build.ArtifactStagingDirectory)'
+              echo "Construyendo imágenes Docker..."
+              cd /home/azureuser/
+              docker-compose down
+              docker-compose build
+              docker-compose up -d
+            displayName: "Construir y ejecutar contenedores"
